@@ -2,8 +2,10 @@ package app.daos.impl;
 
 import app.daos.IDAO;
 import app.dtos.AdviceDTO;
+import app.entities.Advice;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.TypedQuery;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
@@ -24,31 +26,74 @@ public class AdviceDAO implements IDAO<AdviceDTO, Integer> {
 
     @Override
     public AdviceDTO read(Integer integer) {
-        return null;
+        try (EntityManager em = emf.createEntityManager()){
+            Advice advice = em.find(Advice.class, integer);
+            return new AdviceDTO(advice);
+        }
     }
 
     @Override
     public List<AdviceDTO> readAll() {
-        return List.of();
+        try (EntityManager em = emf.createEntityManager()){
+            TypedQuery<AdviceDTO> query = em.createQuery("SELECT new app.dtos.AdviceDTO(a) FROM Advice a", AdviceDTO.class);
+            return query.getResultList();
+        }
     }
 
     @Override
     public AdviceDTO create(AdviceDTO adviceDTO) {
-        return null;
+        try (EntityManager em = emf.createEntityManager()){
+            em.getTransaction().begin();
+            Advice advice = new Advice(adviceDTO);
+            em.persist(advice);
+            em.getTransaction().commit();
+            return new AdviceDTO(advice);
+        }
     }
 
     @Override
     public AdviceDTO update(Integer integer, AdviceDTO adviceDTO) {
-        return null;
+        try (EntityManager em = emf.createEntityManager()){
+            em.getTransaction().begin();
+            Advice a = em.find(Advice.class, integer);
+            a.setAdviceText(adviceDTO.getAdviceText());
+            a.setRating(adviceDTO.getRating());
+            a.setCategory(adviceDTO.getCategory());
+            Advice updatedAdvice = em.merge(a);
+            em.getTransaction().commit();
+            return updatedAdvice != null ? new AdviceDTO(updatedAdvice) : null;
+        }
     }
 
     @Override
     public void delete(Integer integer) {
-
+        try (EntityManager em = emf.createEntityManager()){
+            em.getTransaction().begin();
+            Advice advice = em.find(Advice.class, integer);
+            if (advice != null) {
+                em.remove(advice);
+            }
+            em.getTransaction().commit();
+        }
     }
 
     @Override
     public boolean validatePrimaryKey(Integer integer) {
-        return false;
+        try (EntityManager em = emf.createEntityManager()){
+            Advice advice = em.find(Advice.class, integer);
+            return advice != null;
+        }
+    }
+
+    public void populate()  {
+        try (var em = emf.createEntityManager())    {
+            em.getTransaction().begin();
+            // Sample advices
+
+
+            //em.persist();
+            em.getTransaction().commit();
+
+        }
     }
 }
