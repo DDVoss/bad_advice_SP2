@@ -6,12 +6,16 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.Check;
 
 @Getter
 @NoArgsConstructor
 @Entity
 @Table(name = "advice")
-
+@Check(constraints = "advice_rating BETWEEN 1 AND 10")
 public class Advice {
 
     @Id
@@ -24,6 +28,9 @@ public class Advice {
     private String adviceText;
 
     @Setter
+    @NotNull
+    @Min(1)
+    @Max(10)
     @Column(name = "advice_rating", nullable = false)
     private Integer rating;
 
