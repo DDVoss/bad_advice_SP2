@@ -5,6 +5,8 @@ import app.enums.Category;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Getter
 @NoArgsConstructor
 
@@ -20,6 +22,10 @@ public class AdviceDTO {
         this.adviceText = advice.getAdviceText();
         this.rating = advice.getRating();
         this.category = advice.getCategory();
+    }
+
+    public static List<AdviceDTO> toDTOList(List<Advice> adviceList) {
+        return adviceList.stream().map(AdviceDTO::new).toList();
     }
 
     @Override
