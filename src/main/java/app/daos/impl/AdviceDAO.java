@@ -8,6 +8,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
@@ -49,6 +50,14 @@ public class AdviceDAO implements IDAO<AdviceDTO, Integer> {
             em.getTransaction().commit();
             return new AdviceDTO(advice);
         }
+    }
+
+    public List<AdviceDTO> createMultiple(AdviceDTO[] adviceDTOS)   {
+        List<AdviceDTO> adviceDTOList = new ArrayList<>();
+        for (AdviceDTO adviceDTO : adviceDTOS)  {
+            adviceDTOList.add(create(adviceDTO));
+        }
+        return adviceDTOList;
     }
 
     @Override

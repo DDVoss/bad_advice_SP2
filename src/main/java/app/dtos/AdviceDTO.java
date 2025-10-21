@@ -2,6 +2,7 @@ package app.dtos;
 
 import app.entities.Advice;
 import app.enums.Category;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 
 public class AdviceDTO {
 

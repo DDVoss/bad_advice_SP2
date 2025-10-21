@@ -9,6 +9,7 @@ public class Routes {
 
     public EndpointGroup getRoutes() {
         return () -> {
+            get("/", ctx -> ctx.result("Welcome to the Advice API"));
             path("/advice", adviceRoute.getRoutes());
         };
     }
