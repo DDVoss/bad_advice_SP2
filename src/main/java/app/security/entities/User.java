@@ -28,7 +28,7 @@ public class User implements Serializable, ISecurityUser {
     @Column(name = "username", length = 25)
     private String username;
     @Basic(optional = false)
-    @Column(name = "password", length = 50)
+    @Column(name = "password")
     private String password;
 
     @JoinTable(name = "user_roles", joinColumns = {@JoinColumn(name = "user_name", referencedColumnName = "username")}, inverseJoinColumns = {@JoinColumn(name = "role_name", referencedColumnName = "name")})

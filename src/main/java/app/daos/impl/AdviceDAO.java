@@ -26,10 +26,14 @@ public class AdviceDAO implements IDAO<AdviceDTO, Integer> {
     }
 
     @Override
-    public AdviceDTO read(Integer integer) {
+    public AdviceDTO read(Integer id){
         try (EntityManager em = emf.createEntityManager()){
-            Advice advice = em.find(Advice.class, integer);
-            return new AdviceDTO(advice);
+            Advice advice = em.find(Advice.class, id);
+            if  (advice != null) {
+                return new AdviceDTO(advice);
+            } else {
+                return null;
+            }
         }
     }
 
