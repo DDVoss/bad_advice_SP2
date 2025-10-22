@@ -17,11 +17,33 @@ POST {{url}}/auth/login/
     client.global.set("jwt_token", response.body.token);
 %}
 
-### 3. Populate the database with initial data
+### 3. Make user an admin
+POST {{url}}/auth/user/addrole/
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+    "role": "ADMIN"
+}
+
+### 3.a Refresh JWT token after role change
+POST {{url}}/auth/login/
+
+{
+    "username": "user",
+    "password": "test123"
+}
+> {%
+    client.global.set("jwt_token", response.body.token);
+    client.log("Refreshed jwt_token after role assignment");
+%}
+
+
+### 4. Populate the database with initial data
 GET {{url}}/advice/populate/
 Authorization: Bearer {{jwt_token}}
 
-### 4. Test GET all advice
+### 5. Test GET all advice
 GET {{url}}/advice
 Authorization: Bearer {{jwt_token}}
 
@@ -30,7 +52,11 @@ Authorization: Bearer {{jwt_token}}
     client.log("Number of advice entries: " + response.body.length);
 %}
 
-### 5. Create new advice and capture its ID
+### 6. GET random advice
+GET {{url}}/advice/random
+Authorization: Bearer {{jwt_token}}
+
+### 7. Create new advice and capture its ID
 POST {{url}}/advice
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
@@ -51,11 +77,11 @@ Authorization: Bearer {{jwt_token}}
     }
 %}
 
-### 6. Test GET specific advice by ID
+### 8. Test GET specific advice by ID
 GET {{url}}/advice/{{advice_id}}
 Authorization: Bearer {{jwt_token}}
 
-### 7. Update the created advice
+### 9. Update the created advice
 PUT {{url}}/advice/{{advice_id}}
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
@@ -66,10 +92,18 @@ Authorization: Bearer {{jwt_token}}
   "rating": 5
 }
 
-### 8. Delete the created advice
+### 10. Delete the created advice
 DELETE {{url}}/advice/{{advice_id}}
 Authorization: Bearer {{jwt_token}}
 
-### 9. Verify deletion by attempting to GET the deleted advice
+### 11. Verify deletion by attempting to GET the deleted advice
 GET {{url}}/advice/{{advice_id}}
 Authorization: Bearer {{jwt_token}}
+
+### 12. Wipe all advice entries
+DELETE {{url}}/advice/wipe
+Authorization: Bearer {{jwt_token}}
+
+>%
+    client.log("All advice entries wiped from the database.");
+%}

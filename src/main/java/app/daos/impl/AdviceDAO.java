@@ -104,13 +104,6 @@ public class AdviceDAO implements IDAO<AdviceDTO, Integer> {
     }
 
     public void populate()  {
-        try (EntityManager em = emf.createEntityManager()) {
-            em.getTransaction().begin();
-            // Truncate advice table and reset identity
-            em.createNativeQuery("TRUNCATE TABLE advice RESTART IDENTITY CASCADE").executeUpdate();
-            em.getTransaction().commit();
-        }
-
         // Sample advices
         AdviceDTO[] advices = {
                 addAdvice("Allow your expectations to grow faster than your income", 6, Category.Finance),
