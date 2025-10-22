@@ -36,4 +36,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/bad_advice_SP2:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/bad_advice_sp2:latest
