@@ -19,8 +19,8 @@ public class AdviceDAO implements IDAO<AdviceDTO, Integer> {
     private static EntityManagerFactory emf;
 
     public static AdviceDAO getInstance(EntityManagerFactory _emf) {
+        emf = _emf;
         if (instance == null) {
-            emf = _emf;
             instance = new AdviceDAO();
         }
         return instance;

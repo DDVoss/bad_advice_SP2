@@ -63,6 +63,15 @@ public class AdviceApiTest {
 
     @BeforeEach
     void setUpEachTest()  {
+        // Ensure we have a live EntityManagerFactory for each test (recreate if closed)
+        if (emf == null || !emf.isOpen()) {
+            emf = HibernateConfig.getEntityManagerFactoryForTest();
+            adviceDAO = AdviceDAO.getInstance(emf);
+        } else {
+            // rebind DAO to the possibly-new emf (AdviceDAO.getInstance now updates emf)
+            adviceDAO = AdviceDAO.getInstance(emf);
+        }
+
         // Clear database before each test
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
