@@ -104,6 +104,13 @@ public class AdviceDAO implements IDAO<AdviceDTO, Integer> {
     }
 
     public void populate()  {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            // Truncate advice table and reset identity
+            em.createNativeQuery("TRUNCATE TABLE advice RESTART IDENTITY CASCADE").executeUpdate();
+            em.getTransaction().commit();
+        }
+
         // Sample advices
         AdviceDTO[] advices = {
                 addAdvice("Allow your expectations to grow faster than your income", 6, Category.Finance),
@@ -149,6 +156,27 @@ public class AdviceDAO implements IDAO<AdviceDTO, Integer> {
                 addAdvice("To get over anxiety, just calm down a bit", 6, Category.Health)
         };
         createMultiple(advices);
+    }
+
+    public void clear() {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            em.createQuery("DELETE FROM Advice").executeUpdate();
+            em.createNativeQuery("TRUNCATE TABLE advice RESTART IDENTITY CASCADE").executeUpdate();
+            em.getTransaction().commit();
+        }
+    }
+
+    public AdviceDTO readRandom() {
+        try (EntityManager em = emf.createEntityManager()) {
+            TypedQuery<Advice> query = em.createQuery(
+                    "SELECT a FROM Advice a ORDER BY RANDOM()",
+                    Advice.class
+            );
+            query.setMaxResults(1);
+            List<Advice> results = query.getResultList();
+            return results.isEmpty() ? null : new AdviceDTO(results.get(0));
+        }
     }
 
 }

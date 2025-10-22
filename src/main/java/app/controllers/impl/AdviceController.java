@@ -91,4 +91,24 @@ public class AdviceController implements IController<AdviceDTO, Integer> {
         ctx.res().setStatus(200);
         ctx.json("{ \"message\": \"Database has been populated\" }");
     }
+
+    public void wipeAdvices(Context ctx) {
+        dao.clear();
+        ctx.res().setStatus(204);
+        ctx.json("{ \"message\": \"Database has been wiped\" }");
+    }
+
+    public void getRandomAdvice(Context ctx)  {
+        AdviceDTO randomAdvice = dao.readRandom();
+        if (randomAdvice != null) {
+            ctx.res().setStatus(200);
+            ctx.json(randomAdvice, AdviceDTO.class);
+        } else {
+            ctx.res().setStatus(404);
+            ctx.json("{ \"message\": \"No advice found\" }");
+        }
+
+    }
+
+
 }
