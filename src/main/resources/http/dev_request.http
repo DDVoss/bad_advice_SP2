@@ -28,6 +28,7 @@ Authorization: Bearer {{jwt_token}}
 > {%
     client.log("GET all advice response: " + JSON.stringify(response.body));
     client.log("Number of advice entries: " + response.body.length);
+%}
 
 ### 5. Create new advice and capture its ID
 POST {{url}}/advice
