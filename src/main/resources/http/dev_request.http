@@ -1,0 +1,74 @@
+### 1. Setup: register and login
+POST {{url}}/auth/register/
+
+{
+    "username": "user",
+    "password": "test123"
+}
+
+### 2. Login and store JWT token
+POST {{url}}/auth/login/
+
+{
+    "username": "user",
+    "password": "test123"
+}
+> {%
+    client.global.set("jwt_token", response.body.token);
+%}
+
+### 3. Populate the database with initial data
+GET {{url}}/advice/populate/
+Authorization: Bearer {{jwt_token}}
+
+### 4. Test GET all advice
+GET {{url}}/advice
+Authorization: Bearer {{jwt_token}}
+
+> {%
+    client.log("GET all advice response: " + JSON.stringify(response.body));
+    client.log("Number of advice entries: " + response.body.length);
+
+### 5. Create new advice and capture its ID
+POST {{url}}/advice
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "adviceText": "Test advice content.",
+  "category": "Relationships",
+  "rating": 5
+}
+> {%
+    // Adjust path based on your actual response structure
+    const id = response.body.advice?.adviceId || response.body.id || response.body.adviceId;
+    client.global.set("advice_id", id);
+    client.log("Captured advice_id: " + id);
+
+    if (!id) {
+        client.log("ERROR: Could not extract ID from response: " + JSON.stringify(response.body));
+    }
+%}
+
+### 6. Test GET specific advice by ID
+GET {{url}}/advice/{{advice_id}}
+Authorization: Bearer {{jwt_token}}
+
+### 7. Update the created advice
+PUT {{url}}/advice/{{advice_id}}
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "adviceText": "Test advice content - updated.",
+  "category": "Relationships",
+  "rating": 5
+}
+
+### 8. Delete the created advice
+DELETE {{url}}/advice/{{advice_id}}
+Authorization: Bearer {{jwt_token}}
+
+### 9. Verify deletion by attempting to GET the deleted advice
+GET {{url}}/advice/{{advice_id}}
+Authorization: Bearer {{jwt_token}}

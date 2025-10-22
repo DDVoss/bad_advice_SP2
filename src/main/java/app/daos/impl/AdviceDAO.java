@@ -3,6 +3,7 @@ package app.daos.impl;
 import app.daos.IDAO;
 import app.dtos.AdviceDTO;
 import app.entities.Advice;
+import app.enums.Category;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
@@ -99,14 +100,12 @@ public class AdviceDAO implements IDAO<AdviceDTO, Integer> {
     }
 
     public void populate()  {
-        try (var em = emf.createEntityManager())    {
-            em.getTransaction().begin();
-            // Sample advices
-
-
-            //em.persist();
-            em.getTransaction().commit();
-
-        }
+        // Sample advices
+        AdviceDTO[] advices = {
+                new AdviceDTO(null, "Advice 1", 5, Category.Health),
+                new AdviceDTO(null, "Advice 2", 4, Category.Finance),
+                new AdviceDTO(null, "Advice 3", 3, Category.Personal_Development),
+        };
+        createMultiple(advices);
     }
 }
