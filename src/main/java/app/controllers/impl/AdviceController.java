@@ -70,6 +70,7 @@ public class AdviceController implements IController<AdviceDTO, Integer> {
         dao.delete(id);
         // Response
         ctx.res().setStatus(204);
+        ctx.json("{ \"message\": \"Advice deleted successfully\" }");
     }
 
     @Override
@@ -105,7 +106,7 @@ public class AdviceController implements IController<AdviceDTO, Integer> {
             ctx.json(randomAdvice, AdviceDTO.class);
         } else {
             ctx.res().setStatus(404);
-            ctx.json("{ \"message\": \"No advice found\" }");
+            ctx.json("{ \"Status: 404\", \" message\": \" No advice found\" }");
         }
 
     }

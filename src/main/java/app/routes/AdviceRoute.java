@@ -14,11 +14,11 @@ public class AdviceRoute {
             get("/populate", adviceController::populate);
             get("/random", adviceController::getRandomAdvice);
             delete("/wipe", adviceController::wipeAdvices, Role.ADMIN);
-            post("/", adviceController::create, Role.USER);
+            post("/create", adviceController::create, Role.USER);
             get("/", adviceController::readAll);
             get("/{id}", adviceController::read);
             put("/{id}", adviceController::update);
-            delete("/{id}", adviceController::delete);
+            delete("/delete/{id}", adviceController::delete, Role.USER);
         };
     }
 }

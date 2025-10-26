@@ -6,7 +6,7 @@ import app.config.Populate;
 public class Main {
     public static void main(String[] args) {
         ApplicationConfig.startServer(7070);
-//        Populate populate = new Populate();
-//        populate.populateAdvices();
+        Populate populate = new Populate();
+        populate.populateAdvices();
     }
 }
