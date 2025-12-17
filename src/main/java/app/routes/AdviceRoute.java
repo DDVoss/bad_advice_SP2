@@ -11,7 +11,7 @@ public class AdviceRoute {
 
     protected EndpointGroup getRoutes() {
         return () -> {
-            get("/populate", adviceController::populate);
+            post("/populate", adviceController::populate);
             get("/random", adviceController::getRandomAdvice);
             delete("/wipe", adviceController::wipeAdvices, Role.ADMIN);
             post("/create", adviceController::create, Role.USER);

@@ -1,33 +1,37 @@
-### 1. Setup: register and login
-POST {{url}}/auth/register/
+### 1. Populate the database with initial data
+POST {{url}}/advice/populate
+
+### 2. Login as the admin user (created by populate)
+POST {{url}}/auth/login
 
 {
-    "username": "user",
-    "password": "test123"
-}
-
-### 2. Login and store JWT token
-POST {{url}}/auth/login/
-
-{
-    "username": "user",
+    "username": "admin",
     "password": "test123"
 }
 > {%
     client.global.set("jwt_token", response.body.token);
+    client.log("Admin logged in, token stored");
 %}
 
-### 3. Make user an admin
-POST {{url}}/auth/user/addrole/
+### 3. Register a new regular user
+POST {{url}}/auth/register
+
+{
+    "username": "user",
+    "password": "test123"
+}
+
+### 4. Admin assigns ADMIN role to the new user
+POST {{url}}/auth/user/addrole
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-    "role": "ADMIN"
+  "role": "ADMIN"
 }
 
-### 3.a Refresh JWT token after role change
-POST {{url}}/auth/login/
+### 5. Login as the newly promoted admin user
+POST {{url}}/auth/login
 
 {
     "username": "user",
@@ -35,13 +39,8 @@ POST {{url}}/auth/login/
 }
 > {%
     client.global.set("jwt_token", response.body.token);
-    client.log("Refreshed jwt_token after role assignment");
+    client.log("New admin user logged in");
 %}
-
-
-### 4. Populate the database with initial data
-GET {{url}}/advice/populate/
-Authorization: Bearer {{jwt_token}}
 
 ### 5. Test GET all advice
 GET {{url}}/advice
