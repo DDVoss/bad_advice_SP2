@@ -115,8 +115,10 @@ public class AdviceDAO implements IDAO<AdviceDTO, Integer> {
 
             // Create Roles and Users
             Role adminRole = new Role("ADMIN");
+            Role userRole = new Role("USER");
             User adminUser = new User("admin", "test123");
             adminUser.addRole(adminRole);
+            adminUser.addRole(userRole);
 
             // Sample advices
             AdviceDTO[] advices = {
@@ -166,6 +168,7 @@ public class AdviceDAO implements IDAO<AdviceDTO, Integer> {
             createMultiple(advices);
 
             em.persist(adminRole);
+            em.persist(userRole);
             em.persist(adminUser);
 
             em.getTransaction().commit();

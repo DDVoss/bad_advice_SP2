@@ -11,14 +11,19 @@ public class AdviceRoute {
 
     protected EndpointGroup getRoutes() {
         return () -> {
-            post("/populate", adviceController::populate);
-            get("/random", adviceController::getRandomAdvice);
+            // Specialized Endpoints
             delete("/wipe", adviceController::wipeAdvices, Role.ADMIN);
-            post("/create", adviceController::create, Role.USER);
+            get("/random", adviceController::getRandomAdvice);
+
+            // CRUD Endpoints
+            post("/populate", adviceController::populate);
+            post("/", adviceController::create, Role.USER);
             get("/", adviceController::readAll);
+
+            // Read update delete by ID
             get("/{id}", adviceController::read);
             put("/{id}", adviceController::update);
-            delete("/delete/{id}", adviceController::delete, Role.USER);
+            delete("/{id}", adviceController::delete, Role.USER);
         };
     }
 }
